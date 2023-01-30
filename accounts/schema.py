@@ -68,7 +68,7 @@ class CreateUser(graphene.Mutation):
 class UpdateUser(graphene.Mutation):
     class Arguments:
         uuid = graphene.ID()
-        email = graphene.String()
+        email = graphene.String(required=False)
         username = graphene.String(required=True)
 
     user = graphene.Field(CustomUserType)
@@ -84,6 +84,7 @@ class UpdateUser(graphene.Mutation):
 
 class Mutation(AuthMutation, graphene.ObjectType):
     create_user = CreateUser.Field()
+    update_user = UpdateUser.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
