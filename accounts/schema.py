@@ -41,9 +41,6 @@ class CustomUserType(DjangoObjectType):
         fields = '__all__'
 
 
-
-
-
 class Query(UserQuery, MeQuery, graphene.ObjectType):
     profile_data = graphene.List(ProfileType)
     user_data = graphene.List(CustomUserType)
@@ -53,39 +50,39 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
 
     def resolve_profile_data(root, info):
         return Profile.objects.all()
-    
-    
+
+
 class CreateUser(graphene.Mutation):
     class Arguments:
         username = graphene.String(required=True)
-    
+
     user = graphene.Field(CustomUserType)
-    
+
     @classmethod
-    def mutate(root, info, username)
+    def mutate(cls, root, info, username):
         user = CustomUser(username=username)
         user.save()
         return CreateUser(user=user)
 
+
 class UpdateUser(graphene.Mutation):
     class Arguments:
-        id = graphene.ID()
+        uuid = graphene.ID()
         email = graphene.String()
         username = graphene.String(required=True)
-    
+
     user = graphene.Field(CustomUserType)
-    
+
     @classmethod
-    def mutate(cls, root, info, username, id, email):
-        user = CustomUser.objects.get(id=id)
-        user.username = username 
+    def mutate(cls, root, info, username, uuid, email):
+        user = CustomUser.objects.get(uuid=uuid)
+        user.username = username
         user.email = email
         user.save()
         return UpdateUser(user=user)
-    
 
 
-class Mutation(AuthMutation,  graphene.ObjectType):
+class Mutation(AuthMutation, graphene.ObjectType):
     create_user = CreateUser.Field()
 
 
