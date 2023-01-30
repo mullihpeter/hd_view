@@ -66,6 +66,22 @@ class CreateUser(graphene.Mutation):
         user = CustomUser(username=username)
         user.save()
         return CreateUser(user=user)
+
+class UpdateUser(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        email = graphene.String()
+        username = graphene.String(required=True)
+    
+    user = graphene.Field(CustomUserType)
+    
+    @classmethod
+    def mutate(cls, root, info, username, id, email):
+        user = CustomUser.objects.get(id=id)
+        user.username = username 
+        user.email = email
+        user.save()
+        return UpdateUser(user=user)
     
 
 
