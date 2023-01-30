@@ -53,10 +53,24 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
 
     def resolve_profile_data(root, info):
         return Profile.objects.all()
+    
+    
+class CreateUser(graphene.Mutation):
+    class Arguments:
+        username = graphene.String(required=True)
+    
+    user = graphene.Field(CustomUserType)
+    
+    @classmethod
+    def mutate(root, info, username)
+        user = CustomUser(username=username)
+        user.save()
+        return CreateUser(user=user)
+    
 
 
 class Mutation(AuthMutation,  graphene.ObjectType):
-    pass
+    create_user = CreateUser.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
