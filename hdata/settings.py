@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'corsheaders',
     'graphene_django',
     'graphql_auth',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
@@ -92,6 +93,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'postgres',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'password',
+    #     'HOST': 'blog-postgres',
+    #     'PORT': '5432',
+    # }
 }
 
 # Password validation
@@ -113,14 +122,15 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    "graphql_jwt.backends.JSONWebTokenBackend",
+    'graphql_auth.backends.GraphQLAuthBackend',
+    # "graphql_jwt.backends.JSONWebTokenBackend",
     'django.contrib.auth.backends.ModelBackend',
 ]
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-    "JWT_EXPIRATION_DELTA": timedelta(minutes=5),
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
+    # "JWT_EXPIRATION_DELTA": timedelta(minutes=5),
+    # "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=5),
 
     "JWT_ALLOW_ANY_CLASSES": [
         "graphql_auth.mutations.Register",

@@ -15,7 +15,7 @@ AGE_CHOICES = (
 class CustomUser(AbstractUser):
     uuid = models.UUIDField(default=uuid.uuid4)
     username = models.CharField(max_length=350, unique=True)
-    email = models.EmailField(blank=False, max_length=254, verbose_name="email address")
+    email = models.EmailField(blank=False, max_length=255, verbose_name="email address")
     
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
