@@ -4,6 +4,7 @@ from graphene_django import DjangoObjectType
 from .models import Profile, CustomUser
 from graphql_auth.schema import UserQuery, MeQuery
 from graphql_auth import mutations
+from graphql_jwt.decorators import login_required, superuser_required
 
 
 class AuthMutation(graphene.ObjectType):
@@ -59,6 +60,7 @@ class CreateUser(graphene.Mutation):
     user = graphene.Field(CustomUserType)
 
     @classmethod
+    @superuser_required
     def mutate(cls, root, info, username):
         user = CustomUser(username=username)
         user.save()
@@ -74,6 +76,7 @@ class UpdateUser(graphene.Mutation):
     user = graphene.Field(CustomUserType)
 
     @classmethod
+    @login_required
     def mutate(cls, root, info, username, uuid, email):
         user = CustomUser.objects.get(uuid=uuid)
         user.username = username
