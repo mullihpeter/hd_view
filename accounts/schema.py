@@ -67,6 +67,7 @@ class CreateUser(graphene.Mutation):
         return CreateUser(user=user)
 
 
+# updating user mutation
 class UpdateUser(graphene.Mutation):
     class Arguments:
         uuid = graphene.ID()
@@ -85,9 +86,26 @@ class UpdateUser(graphene.Mutation):
         return UpdateUser(user=user)
 
 
+class DeleteUser(graphene.Mutation):
+    class Arguments:
+        uuid = graphene.ID()
+        #email = graphene.String(required=False)
+        #username = graphene.String(required=True)
+
+    user = graphene.Field(CustomUserType)
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, uuid):
+        user = CustomUser.objects.get(uuid=uuid)
+        user.delete()
+        return
+
+
 class Mutation(AuthMutation, graphene.ObjectType):
     create_user = CreateUser.Field()
     update_user = UpdateUser.Field()
+    delete_user = DeleteUser.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
