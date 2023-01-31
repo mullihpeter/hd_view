@@ -10,6 +10,10 @@ AGE_CHOICES = (
     ('All', 'All'),
     ('Kids', 'Kids'),
 )
+active_roles = (
+   ("user", "user"),
+   ("staff", "staff")   
+)
 
 
 class CustomUser(AbstractUser):
@@ -27,6 +31,8 @@ class Profile(models.Model):
     age_limit = models.CharField(choices=AGE_CHOICES, max_length=15)
     profile_pic = models.ImageField(upload_to='profile_pic', default='default.png')
     uuid = models.UUIDField(default=uuid.uuid4)
+    role = models.CharField(max_length, default="user", choices=active_roles)
 
     def __str__(self):
         return self.nickname
+ser
